@@ -158,61 +158,39 @@ int main(int argc, char *argv[]){
   affiche_tableaux();
 #endif
   
-  int* solution=malloc((nb_sommets-1)*sizeof(int));
+  int* solution=malloc((nb_sommets)*sizeof(int));
   
   for(i=0;i<nb_sommets;i++){
-    solution[i]=nb_sommets-i;
+    solution[i]=i;
   }
+  
   int val_solu = evaluation(solution+1);
   clock_t t1, t2;
-  printf("solution : %d\n",val_solu);
+  printf("\nsolution fournit: %d\n",val_solu);
   
-  /*1ere methode*/
+  /*Méthode Glouton*/
   t1 = clock();
   
   int *tableau_glt = glouton_fonct(tableau_livraison_min, tableau_livraison_max, matrice_temps, nb_sommets);
-  int retard_glt = evaluation(tableau_glt+1);
+  long int retard_glt = evaluation(tableau_glt+1);
   
   t2 = clock();
   
   ecrire_solution(argv[1], tableau_glt+1, retard_glt, (float)(t2-t1)/CLOCKS_PER_SEC);
-  printf("-Retard séquence 1° : %d\n\n",retard_glt);
-
+  printf("Sequence Gluton : \n"); affiche(tableau_glt,nb_sommets);
+  printf("-Retard sequence 1° : %ld\n\n",retard_glt);
   
-  /*2eme methode*/
-  t1 = clock();
+  /*Amélioration Glouton*/
+   t1 = clock();
   
   int *tableau_glt_mod = glouton_fonct_modifie(solution, tableau_livraison_min, tableau_livraison_max, matrice_temps, nb_sommets);
-  int retard_glt_mod = evaluation(tableau_glt_mod+1);
+  long int retard_glt_mod = evaluation(tableau_glt_mod+1);
   t2 = clock();
   
   ecrire_solution(argv[1], tableau_glt_mod+1, retard_glt_mod, (float)(t2-t1)/CLOCKS_PER_SEC);
-  printf("-Retard séquence 2° : %d\n\n",retard_glt_mod);
-  
-  
-  /*3eme methode (2eme methode modifiée)*/
-  int *tableau_glt_final;
-  int retard_glt_final = retard_glt_mod;
-  int meilleur_solu[nb_sommets];
-  
-  t1 = clock();
-  
-  for(i=0;i<10;i++){
-      tableau_glt_final = glouton_fonct_modifie(tableau_glt_mod, tableau_livraison_min, tableau_livraison_max, matrice_temps, nb_sommets);
-      free(tableau_glt_mod);
-      tableau_glt_mod = tableau_glt_final;
-      
-      if(evaluation(tableau_glt_final+1) < retard_glt_final){
-	    intdup(meilleur_solu, tableau_glt_mod, nb_sommets);
-	    retard_glt_final = evaluation(tableau_glt_final+1);
-      }
-  }
-  
-  t2 = clock();
-  
-  printf("-Retard sequence 3° : %d\n\n",retard_glt_final);
-  ecrire_solution(argv[1], meilleur_solu+1, retard_glt_final, (float)(t2-t1)/CLOCKS_PER_SEC);
-  
+  printf("Sequence methode 2° :\n"); 
+  affiche(tableau_glt_mod,nb_sommets);
+  printf("-Retard séquence 2° : %ld\n\n",retard_glt_mod);
   
   
   free(solution);
