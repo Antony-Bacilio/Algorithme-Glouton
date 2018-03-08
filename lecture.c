@@ -177,20 +177,7 @@ int main(int argc, char *argv[]){
   t2 = clock();
   
   ecrire_solution(argv[1], tableau_glt+1, retard_glt, (float)(t2-t1)/CLOCKS_PER_SEC);
-  printf("Sequence Gluton : \n"); affiche(tableau_glt,nb_sommets);
   printf("-Retard sequence 1° : %ld\n\n",retard_glt);
-  
-  /*Amélioration Glouton*/
-   t1 = clock();
-  
-  int *tableau_glt_mod = glouton_fonct_modifie(solution, tableau_livraison_min, tableau_livraison_max, matrice_temps, nb_sommets);
-  long int retard_glt_mod = evaluation(tableau_glt_mod+1);
-  t2 = clock();
-  
-  ecrire_solution(argv[1], tableau_glt_mod+1, retard_glt_mod, (float)(t2-t1)/CLOCKS_PER_SEC);
-  printf("Sequence methode 2° :\n"); 
-  affiche(tableau_glt_mod,nb_sommets);
-  printf("-Retard séquence 2° : %ld\n\n",retard_glt_mod);
   
   
   free(solution);
